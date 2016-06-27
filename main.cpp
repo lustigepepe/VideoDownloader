@@ -61,9 +61,11 @@ int main(int argc, char *argv[])
     //        stream.flush();
     //        cout << stream.rdbuf();
 
-    size_t t;
-    const char* header=boost::asio::buffer_cast<const char*>(request.data());
-    cout << header << "this is header-dop" << endl;
+    // only for testing you know!
+    //    size_t t;
+    //    const char* header=boost::asio::buffer_cast<const char*>(request.data());
+    //    cout << header << "this is header-dop" << endl;
+    // testing end
 
     try{
         boost::asio::write(sock, request);
@@ -88,9 +90,13 @@ int main(int argc, char *argv[])
         cout << e.what() << endl;
 
     }
-    //    std::istream response_stream(&response);
-    //    std::string http_version;
-    //    response_stream >> http_version;
+    std::istream response_stream(&response);
+    std::string http_version;
+    response_stream >> http_version;
+    // check out
+    //    cout << http_version << endl;
+    const char* input =boost::asio::buffer_cast<const char*>(response.data());
+    cout << input << "this is output" << endl;
     //    unsigned int status_code;
     //    response_stream >> status_code;
     //    cout<<status_code<<"    status_code"<<endl;
