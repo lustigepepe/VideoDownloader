@@ -58,12 +58,13 @@ int main(int argc, char *argv[])
     stream << "Host:" << host << "\r\n";
     stream << "Accept: */*\r\n";
     stream << "Connection: close\r\n\r\n";
-//    stream.flush();
-//    cout << stream.rdbuf();
+    //        stream.flush();
+    //        cout << stream.rdbuf();
 
-     size_t t;
+    size_t t;
     const char* header=boost::asio::buffer_cast<const char*>(request.data());
-    cout<<header<<endl;
+    cout << header << "this is header-dop" << endl;
+
     try{
         boost::asio::write(sock, request);
         stream.clear();
@@ -75,27 +76,30 @@ int main(int argc, char *argv[])
         cout << e.what() << endl;
 
     }
+
     boost::asio::streambuf response;
     try{
         //Point to start next time && and done//
-        boost::asio::read_until(sock, response, "\r\n");
+        //        boost::asio::read_until(sock, response, "\r\n");
+        boost::asio::read(sock, response);
+
     }catch(runtime_error e)
     {
         cout << e.what() << endl;
 
     }
-    std::istream response_stream(&response);
-    std::string http_version;
-    response_stream >> http_version;
-    unsigned int status_code;
-    response_stream >> status_code;
-    cout<<status_code<<"    status_code"<<endl;
-    std::string status_message;
-    std::getline(response_stream, status_message);
+    //    std::istream response_stream(&response);
+    //    std::string http_version;
+    //    response_stream >> http_version;
+    //    unsigned int status_code;
+    //    response_stream >> status_code;
+    //    cout<<status_code<<"    status_code"<<endl;
+    //    std::string status_message;
+    //    std::getline(response_stream, status_message);
 
 
 
-cout << "yes man !!" << endl;
-return 0;
+    cout << "yes man !!" << endl;
+    return 0;
 
 }
