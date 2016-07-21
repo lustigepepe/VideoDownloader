@@ -15,13 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h\
+        parser.hpp
 
 FORMS    += mainwindow.ui
-
 macx {
     ## For C++11 VERSION
-    #QMAKE_CXXFLAGS += -std=c++11
+    QMAKE_CXXFLAGS += -std=c++11
+    #CONFIG += c++11
     ## Openssl
     _OPENSSL_PATH = /usr/local/Cellar/openssl/1.0.2g
     INCLUDEPATH += "$${_OPENSSL_PATH}/include/"
@@ -32,6 +33,6 @@ macx {
     INCLUDEPATH += "$${_BOOST_PATH}/include/"
     LIBS += -L$${_BOOST_PATH}/lib
     ## Use only one of these:
-    LIBS += -lboost_chrono-mt -lboost_system # using dynamic lib (not sure if you need that "-mt" at the end or not)
+    LIBS += -lboost_chrono-mt -lboost_system-mt # using dynamic lib (not sure if you need that "-mt" at the end or not)
     #LIBS += $${_BOOST_PATH}/lib/libboost_chrono-mt.a # using static lib
 }

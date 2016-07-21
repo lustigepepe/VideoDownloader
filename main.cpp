@@ -6,6 +6,7 @@
 #include <boost/asio/ssl.hpp>
 #include <cstdlib>
 #include <string>
+#include "parser.hpp"
 
 using namespace std;
 using boost::asio::ip::tcp;
@@ -23,20 +24,23 @@ int main(int argc, char *argv[])
     //    return a.exec();
     // Create a context that uses the default paths for
     // finding CA certificates.
-    //    string host("www.google.de");
-    string host("de.wikipedia.org");
-    //    string parameter("/");
+    //        string host("de.wikipedia.org");
+    //        string parameter("/wiki/Katzen");
 
-    string parameter("/wiki/Katzen");
+    string host("www.youtube.com");
+    string parameter("/get_video_info?video_id=gPEu2fhNONM");
+    //    string parameter("/watch?v=hS5CfP8n_js&feature=youtu.be");
 
     ssl::context ctx(ssl::context::sslv23);
     //    ctx.set_default_verify_paths();
     ctx.load_verify_file("/usr/local/etc/openssl/certs/cert.pem");
-    // Open a socket and connect it to the remote host. // https://de.wikipedia.org/wiki/Hauskatze
+    // Open a socket and connect it to the remote host. // https://de.wikipedia.org/wiki/Hauskatze  //gPEu2fhNONM
+    // https://www.youtube.com/watch?v=hS5CfP8n_js&feature=youtu.be  http://www.dailymotion.com/video/x28eaj_whitney-houston-i-will-always-love_music
     boost::asio::io_service io_service;
     ssl_socket sock(io_service, ctx);
     tcp::resolver resolver(io_service);
-    tcp::resolver::query query(host,"https");
+    tcp::resolver::query query(host, "https");
+
     boost::asio::connect(sock.lowest_layer(), resolver.resolve(query));
     sock.lowest_layer().set_option(tcp::no_delay(true));
 
@@ -52,12 +56,14 @@ int main(int argc, char *argv[])
     //    tcp::iostream stream;
     //    stream.expires_from_now(boost::posix_time::seconds(60));
     //    stream.connect(host, "http");
+
     boost::asio::streambuf request;
     ostream stream(&request);
     stream << "GET " << parameter << " HTTP/1.0\r\n";
     stream << "Host:" << host << "\r\n";
     stream << "Accept: */*\r\n";
     stream << "Connection: close\r\n\r\n";
+
     //        stream.flush();
     //        cout << stream.rdbuf();
 
@@ -82,30 +88,22 @@ int main(int argc, char *argv[])
     boost::asio::streambuf response;
     try{
         //Point to start next time && and done//
-        //        boost::asio::read_until(sock, response, "\r\n");
-        boost::asio::read(sock, response);
+        boost::asio::read_until(sock, response, "\r\n");
+        //boost::asio::read(sock, response);
 
     }catch(runtime_error e)
     {
         cout << e.what() << endl;
 
     }
-    std::istream response_stream(&response);
-    std::string http_version;
-    response_stream >> http_version;
-    // check out
-    //    cout << http_version << endl;
-    const char* input =boost::asio::buffer_cast<const char*>(response.data());
-    cout << input << "this is output" << endl;
-    //    unsigned int status_code;
-    //    response_stream >> status_code;
-    //    cout<<status_code<<"    status_code"<<endl;
-    //    std::string status_message;
-    //    std::getline(response_stream, status_message);
 
+    // check out
+    const char* input = boost::asio::buffer_cast<const char*>(response.data());
+    string a = parser::getContent();
 
 
     cout << "yes man !!" << endl;
     return 0;
 
 }
+
