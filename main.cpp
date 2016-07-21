@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
 
 
-    //    tcp::iostream stream;
-    //    stream.expires_from_now(boost::posix_time::seconds(60));
-    //    stream.connect(host, "http");
+//    tcp::iostream stream;
+//    stream.expires_from_now(boost::posix_time::seconds(60));
+//    stream.connect(host, "http");
 
     boost::asio::streambuf request;
     ostream stream(&request);
@@ -88,8 +88,8 @@ int main(int argc, char *argv[])
     boost::asio::streambuf response;
     try{
         //Point to start next time && and done//
-        boost::asio::read_until(sock, response, "\r\n");
-        //boost::asio::read(sock, response);
+        //        boost::asio::read_until(sock, response, "\r\n");
+        boost::asio::read(sock, response);
 
     }catch(runtime_error e)
     {
@@ -99,11 +99,32 @@ int main(int argc, char *argv[])
 
     // check out
     const char* input = boost::asio::buffer_cast<const char*>(response.data());
-    string a = parser::getContent();
+//    string a = parser::getContent();
+    cout << input << "this is output" << endl;
+    //    cout << endl;
+
+    std::istream response_stream(&response);
+    std::string http_version;
+    response_stream >> http_version;
+
+    cout << "check" << endl;
+    cout << http_version << endl;
+
+    cout << "check" << endl;
+
+    string status_code;
+    response_stream >> status_code;
+    cout << status_code <<"    status_code" << endl;
+
+
+    //    std::string status_message;
+    //    std::getline(response_stream, status_message);
+
 
 
     cout << "yes man !!" << endl;
     return 0;
 
 }
+
 

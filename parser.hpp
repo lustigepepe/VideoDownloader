@@ -8,10 +8,11 @@
 namespace parser {
 using namespace std;
 using namespace boost;
-string getContent(){
+string getContent(const char* value){
+    string temp(value);
 
 
-    return "0";
+    return temp;
 }
 
 string specification(){
