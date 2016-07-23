@@ -53,9 +53,9 @@ int main(int argc, char *argv[])
 
 
 
-//    tcp::iostream stream;
-//    stream.expires_from_now(boost::posix_time::seconds(60));
-//    stream.connect(host, "http");
+    //    tcp::iostream stream;
+    //    stream.expires_from_now(boost::posix_time::seconds(60));
+    //    stream.connect(host, "http");
 
     boost::asio::streambuf request;
     ostream stream(&request);
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     boost::asio::streambuf response;
     try{
         //Point to start next time && and done//
-        //        boost::asio::read_until(sock, response, "\r\n");
+        //boost::asio::read_until(sock, response, "\r\n");
         boost::asio::read(sock, response);
 
     }catch(runtime_error e)
@@ -99,9 +99,11 @@ int main(int argc, char *argv[])
 
     // check out
     const char* input = boost::asio::buffer_cast<const char*>(response.data());
-//    string a = parser::getContent();
-    cout << input << "this is output" << endl;
-    //    cout << endl;
+//    string test = parser::getContent(input);
+//    cout << test << "this is output" << endl;
+      //  cout << input << " this is output" << endl;
+        cout << endl;
+    parser::videoSpecification(input);
 
     std::istream response_stream(&response);
     std::string http_version;
@@ -126,5 +128,7 @@ int main(int argc, char *argv[])
     return 0;
 
 }
+
+
 
 
